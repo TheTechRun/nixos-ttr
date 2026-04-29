@@ -194,8 +194,8 @@ Or use this script with auto HOST detection and git functionality:
 
 This setup currently builds a window-manager environment around Scroll, which is a Sway fork.
 
-If you want a different window manager or a full desktop environment instead, change the relevant imports under:
+If you want a different window manager or a full desktop environment instead, change the relevant imports in your `hosts/<host>/configuration.nix` from:
 
 ```bash
-~/nixos-config/modules/desktop-environment
+~/nixos-config/modules/desktop-environment/
 ```
