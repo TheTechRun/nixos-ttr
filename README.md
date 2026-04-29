@@ -55,7 +55,7 @@ nix-shell -p git micro
 git clone git@github.com:TheTechRun/nixos-ttr.git ~/nixos-config
 cd ~/nixos-config
 git config --global user.email "you@example.com"
-git config --global user.name "ttr"
+git config --global user.name "user"
 git config --global init.defaultBranch master
 ```
 
