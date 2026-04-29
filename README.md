@@ -59,7 +59,19 @@ git config --global user.name "ttr"
 git config --global init.defaultBranch master
 ```
 
-## 4. Back up host config and copy hardware config
+## 4. Rename users if needed
+
+If you do not want to use the default usernames from this repo, run the rename script now before the first flake rebuild.
+
+Example:
+
+```bash
+~/nixos-config/scripts/user-rename.sh ttr muffin
+```
+
+This updates the repo's user-related text and curated `modules/users/` paths so your host imports and user modules stay consistent.
+
+## 5. Back up host config and copy hardware config
 
 Pick the host first:
 
@@ -83,7 +95,7 @@ sudo cp /etc/nixos/hardware-configuration.nix ~/nixos-config/hosts/$HOST/backups
 sudo cp /etc/nixos/hardware-configuration.nix ~/nixos-config/hosts/$HOST/hardware-configuration.nix
 ```
 
-## 5. Bootstrap old hosts if needed
+## 6. Bootstrap old hosts if needed
 
 This section exists because the first flake rebuild can fail when the machine is still on an older NixOS release. If the installed host is behind the release expected by this repo, update the host release first and then do the flake rebuild.
 
@@ -140,7 +152,7 @@ sudo nixos-rebuild switch
 
 Only do the previous steps in the above section when the host is too old for the first flake rebuild to work cleanly.
 
-## 6. Prepare the repo for the first flake rebuild
+## 7. Prepare the repo for the first flake rebuild
 
 Symlink the flake into `/etc/nixos`:
 
@@ -148,7 +160,7 @@ Symlink the flake into `/etc/nixos`:
 sudo ln -sf ~/nixos-config/flake.nix /etc/nixos/flake.nix
 ```
 
-## 7. First flake rebuild
+## 8. First flake rebuild
 
 Use the host selected earlier (be sure to be in the same shell that you did the $HOST export, or just do it again):
 
@@ -164,7 +176,7 @@ sudo nixos-rebuild switch --extra-experimental-features 'nix-command flakes' --f
 sudo nixos-rebuild switch --extra-experimental-features 'nix-command flakes' --flake ~/nixos-config#server
 ```
 
-## 8. Future rebuilds
+## 9. Future rebuilds
 
 After the first successful flake rebuild, the normal command is:
 
