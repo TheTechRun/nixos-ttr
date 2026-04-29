@@ -192,7 +192,7 @@ Or use this script with auto HOST detection and git functionality:
 
 ## Note
 
-This setup currently builds a window-manager environment around Scroll, which is a Sway fork.
+This setup currently builds a window-manager environment around [Scroll](https://github.com/dawsers/scroll), which is a Sway fork.
 
 If you want a different window manager or a full desktop environment instead, change the relevant imports in your `hosts/<host>/configuration.nix` from:
 
