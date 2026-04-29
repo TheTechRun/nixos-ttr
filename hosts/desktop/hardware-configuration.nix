@@ -8,26 +8,27 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
+  # Replace the UUID placeholders below with values from your machine.
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/mapper/luks-d275eda7-d9a1-4caf-abff-5587326e29aa";
+    { device = "/dev/mapper/luks-REPLACE-WITH-YOUR-ROOT-LUKS-UUID";
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."luks-d275eda7-d9a1-4caf-abff-5587326e29aa".device = "/dev/disk/by-uuid/d275eda7-d9a1-4caf-abff-5587326e29aa";
+  boot.initrd.luks.devices."luks-REPLACE-WITH-YOUR-ROOT-LUKS-UUID".device = "/dev/disk/by-uuid/REPLACE-WITH-YOUR-ROOT-LUKS-UUID";
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/EB97-7E8F";
+    { device = "/dev/disk/by-uuid/REPLACE-WITH-YOUR-BOOT-UUID";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
   fileSystems."/efi" =
-    { device = "/dev/disk/by-uuid/EB7B-0E54";
+    { device = "/dev/disk/by-uuid/REPLACE-WITH-YOUR-EFI-UUID";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };

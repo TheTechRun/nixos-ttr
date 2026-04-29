@@ -12,7 +12,6 @@ imports = [
 # Desktop Environment
 ../../modules/desktop-environment/x11/display-manager/light-dm/lightdm.nix
 #../../modules/desktop-environment/x11/i3.nix
-../../modules/desktop-environment/x11/i3/i3-minimal.nix
 
 # Users
 ../../modules/users/ttr-minimal/specific-users.nix
