@@ -9,21 +9,21 @@
   
   # 12TB - External drive encryption (9.9TB partition, sda1)
   boot.initrd.luks.devices."crypted-external1" = {
-    device = "/dev/disk/by-uuid/0674756e-8ec6-4e69-a3a4-e7c3c30f3a08";
+    device = "/dev/disk/by-uuid/99999999-0000-8888-1111-222222222222";
     allowDiscards = true;
     crypttabExtraOpts = [ "tries=0" ];
   };
 
   # HOME 1TB - External drive encryption (1TB partition, sda2)
   boot.initrd.luks.devices."crypted-external2" = {
-    device = "/dev/disk/by-uuid/ec5ed926-d10c-4a2a-8641-cf2a02e6a7d4";
+    device = "/dev/disk/by-uuid/99999999-0000-8888-1111-222222222222";
     allowDiscards = true;
     crypttabExtraOpts = [ "tries=0" ];
   };
 
   # # Backup Drive 1TB - WD BLUE (sdb1)
   # boot.initrd.luks.devices."crypted-external3" = {
-    # device = "/dev/disk/by-uuid/dce8d2d4-19d9-4412-be88-a65243b4a483";
+    # device = "/dev/disk/by-uuid/99999999-0000-8888-1111-222222222222";
     # allowDiscards = true;
   # };
 
@@ -31,7 +31,7 @@
   
  # 12TB - Mount point for 9.9TB partition (filesystem inside crypted-external1)
  fileSystems."/mnt/12tb" = {
-   device = "/dev/disk/by-uuid/281b8602-4a78-4c24-b49e-bc2c040e8c8f";
+   device = "/dev/disk/by-uuid/88888888-1111-7777-2222-333333333333";
    fsType = "btrfs";
    options = [ "defaults" "noatime" ];
    neededForBoot = false;  # Critical: Don't block boot if drive isn't connected
@@ -39,7 +39,7 @@
 
  # HOME 1TB - Mount the encrypted 1TB partition as /home (filesystem inside crypted-external2)
  fileSystems."/mnt/old-home" = {
-   device = "/dev/disk/by-uuid/acc16176-82bf-4982-afb3-7ca3b10f461c";
+   device = "/dev/disk/by-uuid/77777777-2222-6666-3333-444444444444";
    fsType = "btrfs";
    options = [ "defaults" "noatime" ];
    neededForBoot = false;  # Critical: Don't block boot if drive isn't connected
@@ -47,7 +47,7 @@
 
   # # Backup Drive 1TB - WD BLUE mount point
   # fileSystems."/mnt/1tb" = {
-    # device = "/dev/disk/by-uuid/3a041146-d1bf-4db4-9bb6-a1e2cc02540f";
+    # device = "/dev/disk/by-uuid/66666666-3333-5555-4444-555555555555";
     # fsType = "btrfs";
     # options = [ "defaults" "noatime" ];
     # neededForBoot = false;  # Critical: Don't block boot if drive isn't connected
