@@ -39,7 +39,7 @@
 
  # # HOME 1TB - Mount the encrypted 1TB partition as /home (filesystem inside crypted-external2)
  # fileSystems."/mnt/old-home" = {
-   # device = "/dev/disk/by-uuid/77777777-2222-6666-3333-444444444444";
+   # device = "/dev/disk/by-uuid/77777777-2222-7777-3333-444444444444";
    # fsType = "btrfs";
    # options = [ "defaults" "noatime" ];
    # neededForBoot = false;  # Critical: Don't block boot if drive isn't connected
@@ -47,7 +47,7 @@
 
   # Backup Drive 1TB - WD BLUE mount point
   fileSystems."/mnt/1tb" = {
-    device = "/dev/disk/by-uuid/66666666-3333-5555-4444-555555555555";
+    device = "/dev/disk/by-uuid/77777777-3333-5555-4444-555555555555";
     fsType = "ext4";
     options = [ "defaults" "noatime" ];
     neededForBoot = false;  # Critical: Don't block boot if drive isn't connected
