@@ -42,7 +42,7 @@ let
 
   mkShareModule =
     { shares
-    , clients ? "192.168.1.0/24"
+    , clients ? "192.0.2.0/24"
     }:
     lib.mkMerge (
       [
@@ -57,7 +57,7 @@ let
 
           systemd.tmpfiles.rules =
             [ "d ${mountRoot} 0755 root root -" ]
-            ++ map (share: "d ${mkMountPoint share.name} 0755 root root -") shares;
+            ++ map (share: "d ${mkMountPoint share.name} 0755 - - -") shares;
 
           networking.firewall = {
             allowedTCPPorts = [ 111 2049 4000 4001 4002 ];

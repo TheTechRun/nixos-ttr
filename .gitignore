@@ -1,1 +1,5 @@
 *.ss
+.agents/
+.agents/**
+.codex/
+.codex/**

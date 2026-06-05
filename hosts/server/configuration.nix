@@ -1,42 +1,51 @@
 { config, pkgs, lib, ... }:
 
+let
+  paths = import ../../modules/paths.nix;
+in
 {
   imports =
       [ 
 
 # Login Manager
-# ../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-swayfx.nix
-../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-scroll.nix
-# ../../modules/desktop-environment/x11/display-manager/light-dm/lightdm.nix
-# ../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-niri.nix
+# (paths.wayland + "/display-manager/greetd/tuigreet-swayfx.nix")
+(paths.wayland + "/display-manager/greetd/tuigreet-scroll.nix")
+# (paths.x11 + "/display-manager/light-dm/lightdm.nix")
+# (paths.wayland + "/display-manager/greetd/tuigreet-niri.nix")
 
 # Desktop Environment
-# ../../modules/desktop-environment/x11/i3.nix
-# ../../modules/desktop-environment/wayland/swayfx.nix
-../../modules/desktop-environment/wayland/scroll-flake/scroll.nix
-# ../../modules/desktop-environment/wayland/niri.nix
+# (paths.x11 + "/i3.nix")
+# (paths.wayland + "/swayfx.nix")
+(paths.wayland + "/scroll-flake/scroll.nix")
+# (paths.wayland + "/niri.nix")
           
 # System
 ./hardware-configuration.nix
-../../modules/system/cron/cron-server.nix
-../../modules/system/firewall/firewall-server.nix
-../../modules/system/network-share/network-share-server.nix
-../../modules/system/services/services-server.nix
-../../modules/system/ssh/ssh-server.nix
-../../modules/system/fonts/fonts.nix
-../../modules/system/samba/samba-server.nix
+(paths.system + "/cron.nix")
+(paths.system + "/firewall.nix")
+(paths.networkShare + "/network-share.nix")
+(paths.system + "/services.nix")
+(paths.system + "/ssh.nix")
+(paths.system + "/virtualization.nix")
+(paths.system + "/zram.nix")
+(paths.system + "/ssh-initrd.nix")
+(paths.system + "/fonts.nix")
+(paths.system + "/samba.nix")
+(paths.system + "/cloudflared/cloudflared-server.nix")
 # OTHER IMPORTS START HERE -----------------------------
 
 # Users
-../../modules/users/ttr-server/specific-users.nix
+(paths.users + "/global-users.nix")
 # LUKS External Drives
-./mounts.nix
+# ./mounts.nix
 
 # Kernel
-#../../modules/system/kernels/latest.nix
+# (paths.kernels + "/latest.nix")
 
 ];
-  
+
+# home manager
+home-manager.users.ttr-server = import (paths.users + "/home-ttr-server.nix");
   
 # Enable flakes.
 nix.settings.experimental-features = [ "nix-command""flakes" ];
@@ -51,10 +60,27 @@ networking.hostName = "server";
 # Define your nixos version.
 system.stateVersion = "24.05"; 
 
-home-manager.users.ttr-server = import ../../modules/users/ttr-server/home-ttr-server.nix;
 
 # Enable networking
-networking.networkmanager.enable = true;
+networking.networkmanager.enable = false;
+networking.useNetworkd = true;
+systemd.network.enable = true;
+networking.useDHCP = false;
+networking.nameservers = [ "192.0.2.1" "198.51.100.53" "203.0.113.53" ];
+systemd.network.networks."10-eno1" = {
+  matchConfig.Name = "eno1";
+  address = [ "192.0.2.10/24" ];
+  routes = [
+    { Gateway = "192.0.2.1"; }
+  ];
+  networkConfig = {
+    DHCP = "no";
+    IPv6AcceptRA = false;
+    DNS = [ "192.0.2.1" "198.51.100.53" "203.0.113.53" ];
+  };
+  linkConfig.RequiredForOnline = "routable";
+};
+services.dbus.implementation = "dbus";
 
 # Set terminator as the default terminal
 environment.variables = {

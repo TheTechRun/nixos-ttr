@@ -97,11 +97,11 @@
   ];
 
   # Systemd sleep configuration optimized for Intel
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=1800
-    SuspendState=mem
-    HibernateState=disk
-  '';
+  systemd.sleep.settings.Sleep = {
+    HibernateDelaySec = "1800";
+    SuspendState = "mem";
+    HibernateState = "disk";
+  };
 
   # Intel microcode updates
   hardware.cpu.intel.updateMicrocode = true;

@@ -78,11 +78,11 @@
   ];
 
   # Sleep configuration
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=3600
-    SuspendState=mem
-    HibernateState=disk
-  '';
+  systemd.sleep.settings.Sleep = {
+    HibernateDelaySec = "3600";
+    SuspendState = "mem";
+    HibernateState = "disk";
+  };
 
   # Enable AMD microcode
   hardware.cpu.amd.updateMicrocode = true;

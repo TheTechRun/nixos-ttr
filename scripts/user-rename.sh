@@ -19,9 +19,6 @@ What it changes:
       old-base-user-minimal
       /home/old-base-user
   - curated path renames under modules/users/, including:
-      modules/users/<user>/
-      modules/users/<user>-server/
-      modules/users/<user>-minimal/
       home-<user>.nix style files
 
 What it does NOT do:
@@ -122,12 +119,9 @@ echo "  $old_base -> $new_base"
 echo "  /home/$old_base -> /home/$new_base"
 echo
 echo "Planned curated path renames:"
-echo "  modules/users/$old_base/home-$old_base.nix -> modules/users/$old_base/home-$new_base.nix"
-echo "  modules/users/$old_server/home-$old_server.nix -> modules/users/$old_server/home-$new_server.nix"
-echo "  modules/users/$old_minimal/home-$old_minimal.nix -> modules/users/$old_minimal/home-$new_minimal.nix"
-echo "  modules/users/$old_base -> modules/users/$new_base"
-echo "  modules/users/$old_server -> modules/users/$new_server"
-echo "  modules/users/$old_minimal -> modules/users/$new_minimal"
+echo "  modules/users/home-$old_base.nix -> modules/users/home-$new_base.nix"
+echo "  modules/users/home-$old_server.nix -> modules/users/home-$new_server.nix"
+echo "  modules/users/home-$old_minimal.nix -> modules/users/home-$new_minimal.nix"
 echo
 
 read -r -p "Proceed? [y/N] " confirm
@@ -147,28 +141,16 @@ replace_text "$old_base" "$new_base"
 
 # Rename curated repo paths after text replacement.
 rename_path_if_exists \
-  "$REPO_ROOT/modules/users/$old_base/home-$old_base.nix" \
-  "$REPO_ROOT/modules/users/$old_base/home-$new_base.nix"
+  "$REPO_ROOT/modules/users/home-$old_base.nix" \
+  "$REPO_ROOT/modules/users/home-$new_base.nix"
 
 rename_path_if_exists \
-  "$REPO_ROOT/modules/users/$old_server/home-$old_server.nix" \
-  "$REPO_ROOT/modules/users/$old_server/home-$new_server.nix"
+  "$REPO_ROOT/modules/users/home-$old_server.nix" \
+  "$REPO_ROOT/modules/users/home-$new_server.nix"
 
 rename_path_if_exists \
-  "$REPO_ROOT/modules/users/$old_minimal/home-$old_minimal.nix" \
-  "$REPO_ROOT/modules/users/$old_minimal/home-$new_minimal.nix"
-
-rename_path_if_exists \
-  "$REPO_ROOT/modules/users/$old_base" \
-  "$REPO_ROOT/modules/users/$new_base"
-
-rename_path_if_exists \
-  "$REPO_ROOT/modules/users/$old_server" \
-  "$REPO_ROOT/modules/users/$new_server"
-
-rename_path_if_exists \
-  "$REPO_ROOT/modules/users/$old_minimal" \
-  "$REPO_ROOT/modules/users/$new_minimal"
+  "$REPO_ROOT/modules/users/home-$old_minimal.nix" \
+  "$REPO_ROOT/modules/users/home-$new_minimal.nix"
 
 echo
 echo "Username migration complete."

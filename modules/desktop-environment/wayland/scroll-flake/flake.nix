@@ -134,7 +134,7 @@
               export GDK_BACKEND="wayland,x11"
               export SDL_VIDEODRIVER=wayland
               export CLUTTER_BACKEND=wayland
-              export XDG_CURRENT_DESKTOP=scroll
+              export XDG_CURRENT_DESKTOP=scroll:sway
               export XDG_SESSION_TYPE=wayland
               export XDG_SESSION_DESKTOP=scroll
               export ELECTRON_OZONE_PLATFORM_HINT=wayland

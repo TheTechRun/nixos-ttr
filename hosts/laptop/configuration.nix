@@ -1,5 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
+let
+  paths = import ../../modules/paths.nix;
+in
 {
   imports =
 [ 
@@ -7,48 +10,50 @@ inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen3
 
 
 # Login Manager
-# ../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-swayfx.nix
-../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-scroll.nix
-# ../../modules/desktop-environment/x11/display-manager/light-dm/lightdm.nix
-# ../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-niri.nix
+# (paths.wayland + "/display-manager/greetd/tuigreet-swayfx.nix")
+(paths.wayland + "/display-manager/greetd/tuigreet-scroll.nix")
+# (paths.x11 + "/display-manager/light-dm/lightdm.nix")
+# (paths.wayland + "/display-manager/greetd/tuigreet-niri.nix")
 
 # Desktop Environment
-# ../../modules/desktop-environment/x11/i3.nix
-# ../../modules/desktop-environment/wayland/swayfx.nix
-../../modules/desktop-environment/wayland/scroll-flake/scroll.nix
-# ../../modules/desktop-environment/wayland/niri.nix
+# (paths.x11 + "/i3.nix")
+# (paths.wayland + "/swayfx.nix")
+(paths.wayland + "/scroll-flake/scroll.nix")
+# (paths.wayland + "/niri.nix")
 
 # System
 ./hardware-configuration.nix
-../../modules/system/android/moto.nix
-../../modules/system/boot/windows-boot.nix
-../../modules/system/audio/audio-laptop.nix
-../../modules/system/swap/16gb-swap.nix
-../../modules/system/cron/cron-laptop.nix
-../../modules/system/cups/cups.nix
-../../modules/system/firewall/firewall-laptop.nix
-../../modules/system/generations/prune-system-generations-laptop.nix
-../../modules/system/network-share/network-share-laptop.nix
-../../modules/system/samba/samba-laptop.nix
-../../modules/system/services/services-laptop.nix
-../../modules/system/ssh/ssh-laptop.nix
-../../modules/system/virtualization/virtualization-laptop.nix
-# ../../modules/system/keyboard/xdomap.nix
-../../modules/system/fonts/fonts.nix
-../../modules/system/keyboard/thinkpad-T14.nix
-../../modules/system/power/amd.nix
-../../modules/system/power/lid-closed.nix
+(paths.system + "/moto.nix")
+(paths.system + "/windows-boot.nix")
+(paths.system + "/audio.nix")
+(paths.system + "/cron.nix")
+(paths.cups + "/cups.nix")
+(paths.system + "/firewall.nix")
+(paths.system + "/prune-system-generations.nix")
+(paths.networkShare + "/network-share.nix")
+# (paths.system + "/samba.nix")
+(paths.system + "/services.nix")
+(paths.system + "/ssh.nix")
+(paths.system + "/virtualization.nix")
+# (paths.keyboard + "/xdomap.nix")
+(paths.system + "/fonts.nix")
+(paths.keyboard + "/thinkpad-T14.nix")
+(paths.power + "/amd.nix")
+(paths.power + "/lid-closed.nix")
 
 # OTHER IMPORTS START HERE -----------------------------
+# Filesystem & NFS mounts
+# ./mounts.nix
+
 # Kernel
-./../../modules/system/kernels/lts.nix
+(paths.kernels + "/lts.nix")
       
 # Users
-../../modules/users/ttr/specific-users.nix
+(paths.users + "/global-users.nix")
 
 ];
   
-home-manager.users.ttr = import ../../modules/users/ttr/home-ttr.nix;
+home-manager.users.ttr = import (paths.users + "/home-ttr.nix");
   
 # Enable flakes
 nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -66,6 +71,7 @@ system.stateVersion = "24.05";
 
 # Enable networking
 networking.networkmanager.enable = true;
+services.dbus.implementation = "dbus";
 
 # Set terminator as the default terminal
 environment.variables = {
@@ -131,10 +137,6 @@ LC_PAPER = "en_US.UTF-8";
 LC_TELEPHONE = "en_US.UTF-8";
 LC_TIME = "en_US.UTF-8";
 }; 
-
-environment.sessionVariables = {
-PATH = ["${pkgs.pyload-ng}/bin"];
-};
 
 # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 # Configure network proxy if necessary

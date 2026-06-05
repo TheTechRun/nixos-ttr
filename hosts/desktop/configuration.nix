@@ -1,57 +1,69 @@
 { config, pkgs, lib, ... }:
 
+# Paths are defined in ../../modules/paths.nix
+let
+  paths = import ../../modules/paths.nix;
+in
 {
   imports =
 [ 
 
 # Login Manager
-# ../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-swayfx.nix
-../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-scroll.nix
-# ../../modules/desktop-environment/x11/display-manager/light-dm/lightdm.nix
-# ../../modules/desktop-environment/wayland/display-manager/greetd/tuigreet-niri.nix
+# (paths.wayland + "/display-manager/greetd/tuigreet-swayfx.nix")
+(paths.wayland + "/display-manager/greetd/tuigreet-scroll.nix")
+# (paths.x11 + "/display-manager/light-dm/lightdm.nix")
+# (paths.wayland + "/display-manager/greetd/tuigreet-niri.nix")
 
 # Desktop Environment
-# ../../modules/desktop-environment/x11/i3.nix
-# ../../modules/desktop-environment/wayland/swayfx.nix
-../../modules/desktop-environment/wayland/scroll-flake/scroll.nix
-# ../../modules/desktop-environment/wayland/niri.nix
+# (paths.x11 + "/i3.nix")
+# (paths.wayland + "/swayfx.nix")
+(paths.wayland + "/scroll-flake/scroll.nix")
+# (paths.wayland + "/niri.nix")
 
 # System
 ./hardware-configuration.nix
-../../modules/system/android/moto.nix
-../../modules/system/audio/audio-desktop.nix
-../../modules/system/cron/cron-desktop.nix
-#../../modules/system/cups/cups-canon-zebra.nix
-../../modules/system/firewall/firewall-desktop.nix
-../../modules/system/generations/prune-system-generations-desktop.nix
-../../modules/system/network-share/network-share-desktop.nix
-../../modules/system/samba/samba-desktop.nix
-../../modules/system/services/cloudflared-desktop.nix
-../../modules/system/services/services-desktop.nix
-../../modules/system/ssh/ssh-desktop.nix
-../../modules/system/virtualization/virtualization-desktop.nix
-../../modules/system/fonts/fonts.nix
-../../modules/system/zram/50-zram.nix 
-../../modules/system/keyboard/xmodmap.nix
+(paths.system + "/unfree.nix")
+(paths.system + "/moto.nix")
+(paths.system + "/audio.nix")
+(paths.system + "/cron.nix")
+# (paths.cups + "/cups-canon-zebra.nix")
+(paths.system + "/firewall.nix")
+(paths.system + "/prune-system-generations.nix")
+(paths.networkShare + "/network-share.nix")
+(paths.system + "/samba.nix")
+# (paths.system + "/cloudflared/cloudflared-desktop.nix")
+(paths.system + "/services.nix")
+(paths.system + "/ssh.nix")
+(paths.system + "/virtualization.nix")
+(paths.system + "/fonts.nix")
+(paths.system + "/zram.nix")
+(paths.keyboard + "/xmodmap.nix")
 
 
 # OTHER IMPORTS START HERE -----------------------------
 # Filesystem & LUKS Drives
-./mounts.nix
-../../modules/system/systemd/rclone-mount-desktop.nix
+# ./mounts.nix
+# (paths.system + "/rclone-mount.nix")
 
 # Kernel
-../../modules/system/kernels/latest.nix
+(paths.kernels + "/latest.nix")
 
 # Users
-../../modules/users/ttr/specific-users.nix
+(paths.users + "/global-users.nix")
 
 ];
   
-home-manager.users.ttr = import ../../modules/users/ttr/home-ttr.nix;
+# Home Manager
+home-manager.users.ttr = import (paths.users + "/home-ttr.nix");
 
 # Enable flakes
 nix.settings.experimental-features = [ "nix-command" "flakes" ];
+nix.settings.extra-substituters = [
+  "https://nix-community.cachix.org"
+];
+nix.settings.extra-trusted-public-keys = [
+  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+];
 
 # Set buffer size
 #nix.settings.download-buffer-size = 52428800; # 50mb
@@ -65,6 +77,7 @@ system.stateVersion = "24.05";
 
 # Enable networking
 networking.networkmanager.enable = true;
+services.dbus.implementation = "dbus";
 
 # Auto mount usb-devices
 services.udisks2.enable = true;
@@ -122,10 +135,6 @@ LC_PAPER = "en_US.UTF-8";
 LC_TELEPHONE = "en_US.UTF-8";
 LC_TIME = "en_US.UTF-8";
 }; 
-
-environment.sessionVariables = {
-PATH = ["${pkgs.pyload-ng}/bin"];
-};
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 # Configure network proxy if necessary

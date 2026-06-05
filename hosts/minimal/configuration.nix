@@ -1,25 +1,28 @@
 { config, pkgs, lib, ... }:
 
+let
+  paths = import ../../modules/paths.nix;
+in
 {
 imports = [
 # Hardware configuration (you'll need to generate this)
 ./hardware-configuration.nix
 
 # Just the essential system modules
-../../modules/system/fonts/fonts.nix
+(paths.system + "/fonts.nix")
 
 
 # Desktop Environment
-../../modules/desktop-environment/x11/display-manager/light-dm/lightdm.nix
-#../../modules/desktop-environment/x11/i3.nix
+(paths.x11 + "/display-manager/light-dm/lightdm.nix")
+# (paths.x11 + "/i3.nix")
 
 # Users
-../../modules/users/ttr-minimal/specific-users.nix
+(paths.users + "/global-users.nix")
 
 ];
 
 # Home Manager
-home-manager.users.ttr-minimal = import ../../modules/users/ttr-minimal/home-ttr-minimal.nix;
+home-manager.users.ttr-minimal = import (paths.users + "/home-ttr-minimal.nix");
 
 # Enable flakes
 nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -35,6 +38,7 @@ system.stateVersion = "24.05";
 
 # Enable networking
 networking.networkmanager.enable = true;
+services.dbus.implementation = "dbus";
 
 # Enable mutable users
 users.mutableUsers = true;

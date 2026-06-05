@@ -20,8 +20,9 @@
       export SDL_VIDEODRIVER=wayland
       export CLUTTER_BACKEND=wayland
 
-      # XDG desktop variables to set scroll as the desktop
-      export XDG_CURRENT_DESKTOP=scroll
+      # Keep scroll first so scroll-portals.conf is preferred, but include sway
+      # so wlr-based portal backends still match their advertised UseIn entries.
+      export XDG_CURRENT_DESKTOP=scroll:sway
       export XDG_SESSION_TYPE=wayland
       export XDG_SESSION_DESKTOP=scroll
 
@@ -73,7 +74,15 @@
   # Portal configuration for screencasting
   xdg.portal = {
     enable = true;
-    wlr.enable = true;
+    wlr = {
+      enable = true;
+      settings = {
+        screencast = {
+          chooser_type = "simple";
+          chooser_cmd = "${pkgs.slurp}/bin/slurp -f 'Monitor: %o' -or";
+        };
+      };
+    };
     extraPortals = with pkgs; [
       xdg-desktop-portal-wlr
       xdg-desktop-portal-gtk
@@ -82,15 +91,6 @@
       common.default = ["gtk"];
     };
   };
-
-  # Create portal config file for scroll
-  environment.etc."xdg-desktop-portal/scroll-portals.conf".text = ''
-    [preferred]
-    default=gtk
-    org.freedesktop.impl.portal.ScreenCast=wlr
-    org.freedesktop.impl.portal.Screenshot=wlr
-    org.freedesktop.impl.portal.Inhibit=none
-  '';
 
   security.polkit.enable = true;
   hardware.graphics.enable = true;

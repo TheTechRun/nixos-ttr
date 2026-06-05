@@ -1,17 +1,15 @@
-{ mkNixosSystem, desktopPackages, laptopPackages, serverPackages, minimalPackages }:
-let
-  hostPackageSets = {
-    desktop = desktopPackages;
-    laptop = laptopPackages;
-    server = serverPackages;
-    minimal = minimalPackages;
-  };
-in {
+{ mkNixosSystem }:
+{
   nixosConfigurations =
     builtins.mapAttrs
-      (hostName: extraPackages:
+      (hostName: _:
         mkNixosSystem {
-          inherit hostName extraPackages;
+          inherit hostName;
         })
-      hostPackageSets;
+      {
+        desktop = { };
+        laptop = { };
+        server = { };
+        minimal = { };
+      };
 }
